@@ -1,0 +1,21 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "The Yaksis"
+theme = "hugo-cactus-theme"
+
+googleAnalytics = ""
+
+[params]
+name = "Greg Lamp"
+description = "My personal blog"
+bio = "Blogger & Programmer"
+twitter = "theglamp"
+enableRSS = true
+iconFont = "mono-social"
+# The social icons can be styled differently if you use mono as font - circle, rounded, or empty
+socialIconStyle = "circle"
+
+# Add additional social link entries underneath
+[social]
+twitter  = "https://www.twitter.com/theglamp"
+github   = "https://www.github.com/glamp"

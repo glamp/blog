@@ -1,0 +1,7 @@
+[submodule "themes/ananke"]
+	path = themes/hugo-cactus-theme
+	url = https://github.com/digitalcraftsman/hugo-cactus-theme
+[submodule "public"]
+	path = public
+	url = git@github.com:glamp/blog.git
+	branch = master
