@@ -1,7 +1,7 @@
 ---
-title: "Machine Learning for VPs of Product Mgmt"
+title: "Machine Learning for People Who Don't Care About Machine Learning"
 date: 2018-04-10T21:42:40-06:00
-draft: true
+draft: false
 ---
 
 ### What is Machine Learning?
@@ -14,17 +14,23 @@ It involves 2 key concepts:
 1. Using statistics and math optimize this process
 2. The optimization process is referred to as *training*
 
+![](/blog/img/ml.jpg)
+<center>How the Internet portrays Machine Learning.</center>
+
 Here's the big kicker that will likely make some people unhappy.
 
 > It is the same thing as *AI*.
 
-That's right I said it. ML and AI are the same thing. I will qualify that this oversimplifies
+That's right I said it. __ML and AI are the same thing__. I will qualify that this oversimplifies
 things just a little bit (but only a little bit). When marketing folk talk about AI there is 
 typically the connotation that AI will eventually rule the humans. I have no problem with this. It's
 really a way to articulate machine learning that has gotten so good that it can self-learn and adapt
 to virtually any data you feed it.
 
 This, plus the fact that AI typically has post-apocolyptic undertones.
+
+![](/blog/img/ai.jpg)
+<center>How the Internet portrays AI. See, pretty much the same.</center>
 
 
 ### Nothing is new
@@ -36,7 +42,7 @@ that are currently en vogue have been around for a while. The major change is th
 3. more readily available
 
 These 3 things, combined with the ever expanding and easy to use machine learning libraries such as 
-[scikit-learn](...), [tensorflow](...) (I said the T-word!), and [R](...) (I know R isn't a library) have made
+[scikit-learn](http://scikit-learn.org/), [tensorflow](https://www.tensorflow.org/) (I said the T-word!), and [R](https://cran.r-project.org/) (I know R isn't a library) have made
 machine learning accessible to more people. Accessibility has bred limited real-world usage which in turn 
 has bred hype.
 
@@ -52,7 +58,7 @@ still need to be fed clean, consistent tablular data in order to be effective.
 Now when these algorithms *train* or calibrate, what they're really doing is finding the minimum distance
 between a set of points. This is much easier illustrated than typed.
 
-![](/img/linear-regression.png)
+![](/blog/img/linear-regression.png)
 
 Take the image above as an example. This is a classic simple linear regression. The blue points are the
 data we want to predict. The red line is the *"line of best fit"* that our machine learning algorithm (in 
@@ -73,7 +79,7 @@ In regression, you're trying to calculate a line that will be "in the middle" of
 (as seen above). In classification, you're trying ot calculate a line that will "seperate the categories" 
 of your data points.
 
-![](/img/wolf-or-cow.png)
+![](/blog/img/wolf-or-cow.png)
 
 ### Algorithms
 Now here's the cool part. Different algorithms can use __different shapes, numbers, and types of lines__ 
@@ -96,6 +102,8 @@ An analogy is in order. The analogous in a field like Product Management would b
 and they said that they wouldn't buy your product unless the buttons were __<span style="color: teal">teal green</span>__. 
 The same lovely shade of teal that their company uses in their logo and branding.
 
+<img src="/blog/img/teal-button.png" style="width: 100px" />
+
 If you were a bad product manager then you would listen to that customer and make all of your website's 
 buttons teal. This is overfitting.
 
@@ -109,11 +117,37 @@ Fine, we can talk about Tensorflow. Tensorflow is a machine learning library pro
 that easy to use. You need to know what you're doing in order for it to have a substantially higher ROI than using
 one of the simpler, more straightforward libraries such as `scikit-learn`. 
 
+![](/blog/img/tensorflow.png)
+
 What Tensorflow does really well is provide a modestly intuitive way to define and train *neural networks*. Neural networks
 are yet another algorithm you can use to calculate your line. Neural networks, and their cousin deep nerual networks,
 are handy because they can handle data that is psuedo-unstructured (like images, videos, etc.). I say pseudo-unstructured
 because ultimate it's still being fed into the algorithm in a tablular format. You just don't really have to pay as close
 attention to how refined and clean that data is. Pretty handy!
 
+### Why ML is so hot
+It isn't difficult to *do machine learning* anymore. I mentioned the wealth of libraries out there. If you can't tell,
+I really like `scikit-learn. There are may reasons for this:
 
+- I don't have to write much code when I use it
+- It implements the greatest hits (and then some) of ML. So I can do just about everything without leaving the scikit-learn ecosystem.
+- It's old. In this case, old means mature. Mature means not dealing with mind-numbing bugs.
+- The creators and maintainers are very nice and have built up excellent documentation.
+- If I have to listen to a lecture about ML, I prefer it come from someone like Olivier Grisel who does everything with just a slight,
+French accent 🇫🇷, thereby increasing the entertainment value.
+
+
+![](/blog/img/so-hot-right-now.jpg)
+
+My machine learing Francophile fetish aside, scikit-learn reduces building a very sophisticated machine learning model
+down to __5 lines of code__. This is not much code. You don't need a PhD in astrophysics or even a technical degree
+to use it:
+
+```
+from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier()
+target_variable = 'does-make-more-than-50k'
+columns = ['age', 'education', 'hours-worked-per-week']
+clf.fit(df[columns], df[target_variable])
+```
 

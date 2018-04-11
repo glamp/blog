@@ -1,7 +1,7 @@
 ---
 title: "Histograms in Postgres"
 date: 2018-04-10T21:30:53-06:00
-draft: true
+draft: false
 ---
 
 Ever been searching through SQL tables and think, "Gee I wish I could just get a quick

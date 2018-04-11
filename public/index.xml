@@ -6,9 +6,43 @@
     <description>Recent content on The Yaksis</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Tue, 10 Apr 2018 21:42:40 -0600</lastBuildDate>
     
 	<atom:link href="https://glamp.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Machine Learning for People Who Don&#39;t Care About Machine Learning</title>
+      <link>https://glamp.github.io/blog/posts/machine-learning-for-vps-of-product-mgmt/</link>
+      <pubDate>Tue, 10 Apr 2018 21:42:40 -0600</pubDate>
+      
+      <guid>https://glamp.github.io/blog/posts/machine-learning-for-vps-of-product-mgmt/</guid>
+      <description>What is Machine Learning? The definition I have come up with for Machine Learning is as follows&amp;hellip;
+ machine learning is using data to detect patterns
+ It involves 2 key concepts:
+ Using statistics and math optimize this process The optimization process is referred to as training  How the Internet portrays Machine Learning.
+Here&amp;rsquo;s the big kicker that will likely make some people unhappy.
+ It is the same thing as AI.</description>
+    </item>
+    
+    <item>
+      <title>SQL Commands for the Wise</title>
+      <link>https://glamp.github.io/blog/posts/psql-commands-for-the-wise/</link>
+      <pubDate>Tue, 10 Apr 2018 21:31:53 -0600</pubDate>
+      
+      <guid>https://glamp.github.io/blog/posts/psql-commands-for-the-wise/</guid>
+      <description>If you&amp;rsquo;re like me then you might have initially shyed away from using the psql shell. It&amp;rsquo;s nothing to be ashamed of, it&amp;rsquo;s a bit intimidating and not the most intuitive way to execute queries. Over time I&amp;rsquo;ve actually come to enjoy using it. And while I don&amp;rsquo;t neccessarily find myself using it everyday, there are some super handy commands I routinely use that I feel are worth passing on!</description>
+    </item>
+    
+    <item>
+      <title>Histograms in Postgres</title>
+      <link>https://glamp.github.io/blog/posts/histograms-in-postgres/</link>
+      <pubDate>Tue, 10 Apr 2018 21:30:53 -0600</pubDate>
+      
+      <guid>https://glamp.github.io/blog/posts/histograms-in-postgres/</guid>
+      <description>Ever been searching through SQL tables and think, &amp;ldquo;Gee I wish I could just get a quick look at a histogram of this data?&amp;rdquo; Yeah me too. Happens all the time but alas, you&amp;rsquo;re stuck in a SQL prompt somewhere and you&amp;rsquo;re still 2-3 copy/pastes, an Excel array formula, and 5-6 clicks way from reaching this nirvana.
+Well fret no more because I&amp;rsquo;m about to show you how to calculate and &amp;ldquo;plot&amp;rdquo; a histogram from within Postgres.</description>
+    </item>
     
   </channel>
 </rss>

@@ -1,7 +1,7 @@
 ---
 title: "SQL Commands for the Wise"
 date: 2018-04-10T21:31:53-06:00
-draft: true
+draft: false
 ---
 
 If you're like me then you might have initially shyed away from using the `psql`

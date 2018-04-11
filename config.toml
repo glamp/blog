@@ -1,4 +1,4 @@
-baseURL = "http://example.org/"
+baseURL = "https://glamp.github.io/blog/"
 languageCode = "en-us"
 title = "The Yaksis"
 theme = "hugo-cactus-theme"
@@ -7,8 +7,8 @@ googleAnalytics = ""
 
 [params]
 name = "Greg Lamp"
-description = "My personal blog"
-bio = "Blogger & Programmer"
+description = "Greg's blog"
+bio = "Author of many abandoned open-source libraries that once showed promise, former founder of Yhat (YC W15), currently Director of Engineering at Alteryx."
 twitter = "theglamp"
 enableRSS = true
 iconFont = "mono-social"
