@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Greg Lamp">
+<meta name="description" content="My personal blog">
+<meta name="generator" content="Hugo 0.38.2" />
+<title>SQL Commands for the Wise</title>
+<link rel="shortcut icon" href="https://glamp.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://glamp.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://glamp.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://glamp.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://glamp.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Yaksis" />
+
+
+<meta property="og:title" content="SQL Commands for the Wise" />
+<meta property="og:description" content="If you&rsquo;re like me then you might have initially shyed away from using the psql shell. It&rsquo;s nothing to be ashamed of, it&rsquo;s a bit intimidating and not the most intuitive way to execute queries. Over time I&rsquo;ve actually come to enjoy using it. And while I don&rsquo;t neccessarily find myself using it everyday, there are some super handy commands I routinely use that I feel are worth passing on!" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://glamp.github.io/blog/posts/psql-commands-for-the-wise/" />
+
+
+
+<meta property="article:published_time" content="2018-04-10T21:31:53-06:00"/>
+
+<meta property="article:modified_time" content="2018-04-10T21:31:53-06:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="SQL Commands for the Wise">
+<meta itemprop="description" content="If you&rsquo;re like me then you might have initially shyed away from using the psql shell. It&rsquo;s nothing to be ashamed of, it&rsquo;s a bit intimidating and not the most intuitive way to execute queries. Over time I&rsquo;ve actually come to enjoy using it. And while I don&rsquo;t neccessarily find myself using it everyday, there are some super handy commands I routinely use that I feel are worth passing on!">
+
+
+<meta itemprop="datePublished" content="2018-04-10T21:31:53-06:00" />
+<meta itemprop="dateModified" content="2018-04-10T21:31:53-06:00" />
+<meta itemprop="wordCount" content="542">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SQL Commands for the Wise"/>
+<meta name="twitter:description" content="If you&rsquo;re like me then you might have initially shyed away from using the psql shell. It&rsquo;s nothing to be ashamed of, it&rsquo;s a bit intimidating and not the most intuitive way to execute queries. Over time I&rsquo;ve actually come to enjoy using it. And while I don&rsquo;t neccessarily find myself using it everyday, there are some super handy commands I routinely use that I feel are worth passing on!"/>
+<meta name="twitter:site" content="@https://www.twitter.com/theglamp"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://glamp.github.io/blog/'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://glamp.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>SQL Commands for the Wise</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        April 10, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        
+
+<p>If you&rsquo;re like me then you might have initially shyed away from using the <code>psql</code>
+shell. It&rsquo;s nothing to be ashamed of, it&rsquo;s a bit intimidating and not the most
+intuitive way to execute queries. Over time I&rsquo;ve actually come to enjoy using
+it. And while I don&rsquo;t neccessarily find myself using it everyday, there are some
+super handy commands I routinely use that I feel are worth passing on!</p>
+
+<h3 id="h"><code>\h</code></h3>
+
+<p>*help on syntax of SQL commands, * for all commands*</p>
+
+<p>It took me a really long time ot find this command. It is incredibly helpful,
+especially when you consider how many times I forget the correct order of
+commands for <code>alter table</code> or how many times I&rsquo;ve forgotten how to spell
+<code>GRANT ALL ~PRIVELEGES~ PRIVILEGES</code>.</p>
+
+<p>You can pass no arguments and get a list of all commands, or you can pass it
+a specific command you need help with.</p>
+
+<p><img src="/img/help-copy.png" alt="" />
+<em>I&rsquo;m sure you&rsquo;ve never forgotten the syntax for <code>\COPY</code>&hellip;</em></p>
+
+<h3 id="x-auto"><code>\x auto</code></h3>
+
+<p><em>toggle expanded output</em></p>
+
+<p>Another super handy one. My guess is that a lot of people already use this
+but it&rsquo;s too good to risk not including in the list. <code>\x auto</code> makes reading
+output from tables so much easier. Postgres will automagically toggle between
+long/wide formats for you. I don&rsquo;t know how people lived before Postgres X.YY.</p>
+
+<p><img src="/img/x-auto.png" alt="" />
+<em>It even adjusts to your screen width!</em></p>
+
+<h3 id="timing"><code>\timing</code></h3>
+
+<p><em>toggle timing of commands</em></p>
+
+<p>Great for benchmarking queries, <code>\timing</code> adds the number of seconds your
+query took to execute to the end of your results. Simple but oh so handy!</p>
+
+<pre><code>select avg(price), sum(1) from diamonds;
+(1 row)
+Time: 213.941 ms
+</code></pre>
+
+<h3 id="i"><code>\i</code></h3>
+
+<p><em>execute commands from file</em></p>
+
+<p>A lot of times I like to be able to interact with Postgres through the shell
+but want to write and build my queries in an editor. This is pretty natural,
+sometimes SQL queries can get quite lengthy! Stuffing that all into a prompt
+is madness.</p>
+
+<p>Enter the <code>\i &lt;filename&gt;</code> command. It allows you to specify a file where your
+query is stored, and it will automatically execute that file in SQL.</p>
+
+<p><img src="/img/i-command.png" alt="" />
+<em>You think I made that histogram function all in the shell? No way José.</em></p>
+
+<h3 id="cd"><code>\cd</code></h3>
+
+<p><em>change the current working directory</em></p>
+
+<p>Ever been in a Postgres session and realized that you&rsquo;re 5 directories
+from the CSV you need to upload lives. It&rsquo;s super annoying and now, 100%
+treatable with <code>\cd</code>. Just pass it the directory you&rsquo;d like to move to
+and <code>psql</code> will make it so.</p>
+
+<p>It can work great in conjunction with the next command&hellip;</p>
+
+<h3 id="toc_5"><code>\!</code></h3>
+
+<p><em>execute command in shell or start interactive shell</em></p>
+
+<p>Are you one of those people who routinely types <code>ls</code> into your <code>psql</code> console
+and feels like a total idiot&ndash;just hope nobody is looking over your shoulder. Happens
+to me all the time! And while I might be playing up the embarrassment factor,
+there&rsquo;s no need to play up just how handy it is to be able to run shell commands
+from your Postgres session using the <code>\!</code> command. You can even &ldquo;pipe&rdquo; commands
+to one another.</p>
+
+<p><img src="/img/bash-shell-pipe.png" alt="" />
+<em>Run commands straight from Postgres. Here I&rsquo;m searching for a file, then piping to <code>head</code> to limit the number of files displayed.</em></p>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<ul>
+<li><a href="http://www.postgresonline.com/downloads/special_feature/postgresql83_psql_cheatsheet.pdf">Psql cheatsheet</a></li>
+<li><a href="https://www.postgresql.org/docs/9.2/static/app-psql.html">Psql Guide</a></li>
+<li><a href="http://beige.ucs.indiana.edu/I590/node150.html">Talking to a PostgreSQL Data Base with psql</a></li>
+<li><a href="http://linuxcommand.org/man_pages/psql1.html">Man Page!</a></li>
+</ul>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/theglamp">
+    <img class="avatar" src="https://glamp.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">Greg Lamp</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fglamp.github.io%2fblog%2fposts%2fpsql-commands-for-the-wise%2f - SQL%20Commands%20for%20the%20Wise by @theglamp"><span class="icon-twitter"> tweet</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="/blog/posts/machine-learning-for-vps-of-product-mgmt/">Machine Learning for People Who Don&#39;t Care About Machine Learning<aside class="dates">Apr 10 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/histograms-in-postgres/">Histograms in Postgres<aside class="dates">Apr 10 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    
+    <a class="symbol" href="https://www.github.com/glamp">
+        circlegithub
+    </a>
+    
+    <a class="symbol" href="https://www.twitter.com/theglamp">
+        circletwitterbird
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+        © Copyright 2018 Greg Lamp
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://glamp.github.io/blog/js/main.js"></script>
+<script src="https://glamp.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

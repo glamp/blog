@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Greg Lamp">
+<meta name="description" content="My personal blog">
+<meta name="generator" content="Hugo 0.38.2" />
+<title>Machine Learning for People Who Don&#39;t Care About Machine Learning</title>
+<link rel="shortcut icon" href="https://glamp.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://glamp.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://glamp.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://glamp.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://glamp.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Yaksis" />
+
+
+<meta property="og:title" content="Machine Learning for People Who Don&#39;t Care About Machine Learning" />
+<meta property="og:description" content="What is Machine Learning? The definition I have come up with for Machine Learning is as follows&hellip;
+ machine learning is using data to detect patterns
+ It involves 2 key concepts:
+ Using statistics and math optimize this process The optimization process is referred to as training  Here&rsquo;s the big kicker that will likely make some people unhappy.
+ It is the same thing as AI.
+ That&rsquo;s right I said it." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://glamp.github.io/blog/posts/machine-learning-for-vps-of-product-mgmt/" />
+
+
+
+<meta property="article:published_time" content="2018-04-10T21:42:40-06:00"/>
+
+<meta property="article:modified_time" content="2018-04-10T21:42:40-06:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Machine Learning for People Who Don&#39;t Care About Machine Learning">
+<meta itemprop="description" content="What is Machine Learning? The definition I have come up with for Machine Learning is as follows&hellip;
+ machine learning is using data to detect patterns
+ It involves 2 key concepts:
+ Using statistics and math optimize this process The optimization process is referred to as training  Here&rsquo;s the big kicker that will likely make some people unhappy.
+ It is the same thing as AI.
+ That&rsquo;s right I said it.">
+
+
+<meta itemprop="datePublished" content="2018-04-10T21:42:40-06:00" />
+<meta itemprop="dateModified" content="2018-04-10T21:42:40-06:00" />
+<meta itemprop="wordCount" content="1004">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Machine Learning for People Who Don&#39;t Care About Machine Learning"/>
+<meta name="twitter:description" content="What is Machine Learning? The definition I have come up with for Machine Learning is as follows&hellip;
+ machine learning is using data to detect patterns
+ It involves 2 key concepts:
+ Using statistics and math optimize this process The optimization process is referred to as training  Here&rsquo;s the big kicker that will likely make some people unhappy.
+ It is the same thing as AI.
+ That&rsquo;s right I said it."/>
+<meta name="twitter:site" content="@https://www.twitter.com/theglamp"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://glamp.github.io/blog/'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://glamp.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Machine Learning for People Who Don&#39;t Care About Machine Learning</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        April 10, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        
+
+<h3 id="what-is-machine-learning">What is Machine Learning?</h3>
+
+<p>The definition I have come up with for <em>Machine Learning</em> is as follows&hellip;</p>
+
+<blockquote>
+<p><em>machine learning</em> is using data to detect patterns</p>
+</blockquote>
+
+<p>It involves 2 key concepts:</p>
+
+<ol>
+<li>Using statistics and math optimize this process</li>
+<li>The optimization process is referred to as <em>training</em></li>
+</ol>
+
+<p>Here&rsquo;s the big kicker that will likely make some people unhappy.</p>
+
+<blockquote>
+<p>It is the same thing as <em>AI</em>.</p>
+</blockquote>
+
+<p>That&rsquo;s right I said it. ML and AI are the same thing. I will qualify that this oversimplifies
+things just a little bit (but only a little bit). When marketing folk talk about AI there is
+typically the connotation that AI will eventually rule the humans. I have no problem with this. It&rsquo;s
+really a way to articulate machine learning that has gotten so good that it can self-learn and adapt
+to virtually any data you feed it.</p>
+
+<p>This, plus the fact that AI typically has post-apocolyptic undertones.</p>
+
+<h3 id="nothing-is-new">Nothing is new</h3>
+
+<p>What I find really interesting about ML is that none of the concepts are particularly new. The algorithms
+that are currently en vogue have been around for a while. The major change is that computers have become</p>
+
+<ol>
+<li>faster</li>
+<li>cheaper</li>
+<li>more readily available</li>
+</ol>
+
+<p>These 3 things, combined with the ever expanding and easy to use machine learning libraries such as
+<a href="...">scikit-learn</a>, <a href="...">tensorflow</a> (I said the T-word!), and <a href="...">R</a> (I know R isn&rsquo;t a library) have made
+machine learning accessible to more people. Accessibility has bred limited real-world usage which in turn
+has bred hype.</p>
+
+<h3 id="how-machine-learning-works">How machine learning works</h3>
+
+<p>Machine learning uses different algorithms to detect patterns. These algorithms all do the same thing:
+<em>they take input data and use it to produce weights</em>. These weights can then be used to make predictions
+about future observations of data in the same format.</p>
+
+<p>One of the big advances in the past few years is that we (the humans) have come up with ways to relax the
+strict conditions by which these algorithms are able to accept input. Despite this, almost all algorithms
+still need to be fed clean, consistent tablular data in order to be effective.</p>
+
+<p>Now when these algorithms <em>train</em> or calibrate, what they&rsquo;re really doing is finding the minimum distance
+between a set of points. This is much easier illustrated than typed.</p>
+
+<p><img src="/img/linear-regression.png" alt="" /></p>
+
+<p>Take the image above as an example. This is a classic simple linear regression. The blue points are the
+data we want to predict. The red line is the <em>&ldquo;line of best fit&rdquo;</em> that our machine learning algorithm (in
+this case linear regression) has calculated as the best way to characterize this dataset.</p>
+
+<p>You can then use that line to make predictions about future observations.</p>
+
+<h3 id="classification-and-regression">Classification and Regression</h3>
+
+<p>I know what you&rsquo;re thinking, this is the part where I talk about <strong>Tensorflow</strong> and how it will fulfill your
+wildest hopes and dreams while instantly making your business profitable. You are mistaken.</p>
+
+<p>The overwhelming majority of machine learning tasks break down into 2 categories:</p>
+
+<ol>
+<li>regression &ndash; predicting a value (such as price or time to failure)</li>
+<li>classification &ndash; predicting the category of something (dog/cat, good/bad, wolf/cow)</li>
+</ol>
+
+<p>In regression, you&rsquo;re trying to calculate a line that will be &ldquo;in the middle&rdquo; of all of your data points
+(as seen above). In classification, you&rsquo;re trying ot calculate a line that will &ldquo;seperate the categories&rdquo;
+of your data points.</p>
+
+<p><img src="/img/wolf-or-cow.png" alt="" /></p>
+
+<h3 id="algorithms">Algorithms</h3>
+
+<p>Now here&rsquo;s the cool part. Different algorithms can use <strong>different shapes, numbers, and types of lines</strong>
+to calculate the middle line or seperating line. For instance, in the <em>wolf and cow</em> example above, there are
+3 different algorithms beings used to seperate each category. As you can see, the <em>SVM</em> method is non-linear,
+meaning it doesn&rsquo;t have to use straight lines. While the <em>logistic</em> method, which is linear, can only seperate
+points by using a straight line. And then behind door #3 is a <em>decision tree</em> which uses a set auto-generated
+rules in order to seperate the categories.</p>
+
+<p>So why wouldn&rsquo;t you always just use the most sophisticated method?</p>
+
+<h3 id="overfitting">Overfitting</h3>
+
+<p>You&rsquo;re sure this time. I&rsquo;m going tell you about <strong>Tensorflow</strong> now. Wrong again!</p>
+
+<p>Well sometimes your model can be too clever. I know these seems like a step backwards but it&rsquo;s true. Your AI
+can be <em>too good</em> at understanding the dataset you&rsquo;re showing it. As a result it&rsquo;s not general enough to make
+predictions on future observations.</p>
+
+<p>An analogy is in order. The analogous in a field like Product Management would be if you talked to 1 customer
+and they said that they wouldn&rsquo;t buy your product unless the buttons were <strong><span style="color: teal">teal green</span></strong>.
+The same lovely shade of teal that their company uses in their logo and branding.</p>
+
+<p>If you were a bad product manager then you would listen to that customer and make all of your website&rsquo;s
+buttons teal. This is overfitting.</p>
+
+<p>But you&rsquo;re not a bad product manager. You know that while this one customer might not buy your product because
+you don&rsquo;t have teal buttons, you know that there are plenty of other customers out there who aren&rsquo;t quite as
+opinionated about button color. This is because you have a solid mental model about what your <em>typical customer</em> really
+care about.</p>
+
+<h3 id="greg-are-you-ever-going-to-talk-about-tensorflow">Greg, are you ever going to talk about Tensorflow?</h3>
+
+<p>Fine, we can talk about Tensorflow. Tensorflow is a machine learning library produced by Google. It isn&rsquo;t all
+that easy to use. You need to know what you&rsquo;re doing in order for it to have a substantially higher ROI than using
+one of the simpler, more straightforward libraries such as <code>scikit-learn</code>.</p>
+
+<p>What Tensorflow does really well is provide a modestly intuitive way to define and train <em>neural networks</em>. Neural networks
+are yet another algorithm you can use to calculate your line. Neural networks, and their cousin deep nerual networks,
+are handy because they can handle data that is psuedo-unstructured (like images, videos, etc.). I say pseudo-unstructured
+because ultimate it&rsquo;s still being fed into the algorithm in a tablular format. You just don&rsquo;t really have to pay as close
+attention to how refined and clean that data is. Pretty handy!</p>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/theglamp">
+    <img class="avatar" src="https://glamp.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">Greg Lamp</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fglamp.github.io%2fblog%2fposts%2fmachine-learning-for-vps-of-product-mgmt%2f - Machine%20Learning%20for%20People%20Who%20Don%27t%20Care%20About%20Machine%20Learning by @theglamp"><span class="icon-twitter"> tweet</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="/blog/posts/psql-commands-for-the-wise/">SQL Commands for the Wise<aside class="dates">Apr 10 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/histograms-in-postgres/">Histograms in Postgres<aside class="dates">Apr 10 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    
+    <a class="symbol" href="https://www.github.com/glamp">
+        circlegithub
+    </a>
+    
+    <a class="symbol" href="https://www.twitter.com/theglamp">
+        circletwitterbird
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+        © Copyright 2018 Greg Lamp
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://glamp.github.io/blog/js/main.js"></script>
+<script src="https://glamp.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

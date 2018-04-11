@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Greg Lamp">
+<meta name="description" content="My personal blog">
+<meta name="generator" content="Hugo 0.38.2" />
+<title>Histograms in Postgres</title>
+<link rel="shortcut icon" href="https://glamp.github.io/blog/images/favicon.ico">
+<link rel="stylesheet" href="https://glamp.github.io/blog/css/style.css">
+<link rel="stylesheet" href="https://glamp.github.io/blog/css/highlight.css">
+
+
+
+<link rel="stylesheet" href="https://glamp.github.io/blog/css/monosocialiconsfont.css">
+
+
+
+<link href="https://glamp.github.io/blog/index.xml" rel="alternate" type="application/rss+xml" title="The Yaksis" />
+
+
+<meta property="og:title" content="Histograms in Postgres" />
+<meta property="og:description" content="Ever been searching through SQL tables and think, &ldquo;Gee I wish I could just get a quick look at a histogram of this data?&rdquo; Yeah me too. Happens all the time but alas, you&rsquo;re stuck in a SQL prompt somewhere and you&rsquo;re still 2-3 copy/pastes, an Excel array formula, and 5-6 clicks way from reaching this nirvana.
+Well fret no more because I&rsquo;m about to show you how to calculate and &ldquo;plot&rdquo; a histogram from within Postgres." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://glamp.github.io/blog/posts/histograms-in-postgres/" />
+
+
+
+<meta property="article:published_time" content="2018-04-10T21:30:53-06:00"/>
+
+<meta property="article:modified_time" content="2018-04-10T21:30:53-06:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Histograms in Postgres">
+<meta itemprop="description" content="Ever been searching through SQL tables and think, &ldquo;Gee I wish I could just get a quick look at a histogram of this data?&rdquo; Yeah me too. Happens all the time but alas, you&rsquo;re stuck in a SQL prompt somewhere and you&rsquo;re still 2-3 copy/pastes, an Excel array formula, and 5-6 clicks way from reaching this nirvana.
+Well fret no more because I&rsquo;m about to show you how to calculate and &ldquo;plot&rdquo; a histogram from within Postgres.">
+
+
+<meta itemprop="datePublished" content="2018-04-10T21:30:53-06:00" />
+<meta itemprop="dateModified" content="2018-04-10T21:30:53-06:00" />
+<meta itemprop="wordCount" content="1297">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Histograms in Postgres"/>
+<meta name="twitter:description" content="Ever been searching through SQL tables and think, &ldquo;Gee I wish I could just get a quick look at a histogram of this data?&rdquo; Yeah me too. Happens all the time but alas, you&rsquo;re stuck in a SQL prompt somewhere and you&rsquo;re still 2-3 copy/pastes, an Excel array formula, and 5-6 clicks way from reaching this nirvana.
+Well fret no more because I&rsquo;m about to show you how to calculate and &ldquo;plot&rdquo; a histogram from within Postgres."/>
+<meta name="twitter:site" content="@https://www.twitter.com/theglamp"/>
+
+
+    </head>
+<body>
+    <nav class="main-nav">
+	
+		<a href='https://glamp.github.io/blog/'> <span class="arrow">←</span>Home</a>
+	
+
+	
+
+	
+		<a class="cta" href="https://glamp.github.io/blog/index.xml">Subscribe</a>
+	
+</nav>
+
+    <section id="wrapper">
+        
+        
+<article class="post">
+    <header>
+        <h1>Histograms in Postgres</h1>
+        <h2 class="subtitle"></h2>
+        <h2 class="headline">
+        April 10, 2018
+        <br>
+        
+        </h2>
+    </header>
+    <section id="post-body">
+        
+
+<p>Ever been searching through SQL tables and think, &ldquo;Gee I wish I could just get a quick
+look at a histogram of this data?&rdquo; Yeah me too. Happens all the time but alas, you&rsquo;re
+stuck in a SQL prompt somewhere and you&rsquo;re still 2-3 copy/pastes, an Excel array formula,
+and 5-6 clicks way from reaching this nirvana.</p>
+
+<p>Well fret no more because I&rsquo;m about to show you how to calculate and &ldquo;plot&rdquo; a
+histogram from <em>within Postgres</em>. That&rsquo;s right, you&rsquo;ll be making ascii art all
+from within the confines of your <code>psql</code> shell.</p>
+
+<p><img src="/img/ascii-histogram.png" alt="" /></p>
+
+<h3 id="what-is-a-histogram">What is a histogram?</h3>
+
+<p>Histograms are way visual way of displaying the distribution of your data. It
+helps answer the question, &ldquo;What are the values of your data? and How often does
+each value occur?&ldquo;.</p>
+
+<p>Histograms shouldn&rsquo;t be confused with &ldquo;frequency charts&rdquo;. &ldquo;Frequency charts&rdquo;, while
+they can be just as helpful, are only used for categorical (non-numerical) data.
+For example, if you wanted to count how many countries name&rsquo;s started with each
+letter of the alphabet, you&rsquo;d see something like this:</p>
+
+<p><img src="/img/1st-letter-of-country-name.png" alt="" /></p>
+
+<p>So while it&rsquo;s a similar exercise, just know that when we&rsquo;re talking about histograms,
+we&rsquo;re talking about numerical data. For example, a histogram showing the price
+of a set of diamonds looks like this:</p>
+
+<p><img src="/img/diamonds.png" alt="" /></p>
+
+<p>So you can see how they&rsquo;re so useful! It&rsquo;s a great way to take a quick look at a
+bunch of data without having to inspect each row individually or put everything
+into a pivot table in Excel.</p>
+
+<h3 id="data">Data</h3>
+
+<p>For this post I&rsquo;m going to be using the [diamonds dataset](). It&rsquo;s a fairly common
+sample dataset that&rsquo;s found in both industry and academia. It even ships with some
+popular R packages like ggplot2.</p>
+
+<p>The dataset consists of ~50K rows and 10 columns. In our example below we&rsquo;ll be
+calculating a histogram for the the <code>price</code> column (just like the example above).</p>
+
+<p>&hellip;insert first 5 rows of diamonds dataset&hellip;</p>
+
+<h3 id="methodology">Methodology</h3>
+
+<p>Calculating histograms consists of a few steps:</p>
+
+<ul>
+<li>Calculate the <a href="https://en.wikipedia.org/wiki/Histogram">&ldquo;bins&rdquo;</a></li>
+<li>Counting the number of datapoints in each bin</li>
+<li>Making the visualization</li>
+</ul>
+
+<h3 id="calculating-your-bins">Calculating Your Bins</h3>
+
+<p>Determining the &ldquo;right&rdquo; number of buckets, or bins, for your histogram is a
+hotly contested (or at least opinionated) topic. In short, there&rsquo;s no one
+perfect way to calculate the number and size of your bins, you&rsquo;ll need to take
+things on a case by case basis. There are a few common ways that have stayed
+popular over the years:</p>
+
+<ul>
+<li>Square-root: take the sqare root of the number of data points (n)</li>
+<li>Sturges&rsquo; formula: log-2 of n + 1</li>
+<li>Freedman–Diaconis&rsquo;: (2 * (75th percentile - 25th percentile)) / (n^(<sup>1</sup>&frasl;<sub>3</sub>)</li>
+</ul>
+
+<p>For our case we&rsquo;re going to use a modified version of the square root method.
+Since there&rsquo;s only so many rows we can display on our screen at once, we have
+an upper bound on the number of bins that we can reasonably use. For practical
+puposes, our output starts to break down after 50 bins, so the formula we&rsquo;ll
+be using is:</p>
+
+<pre><code>min(50, sqrt(n))
+</code></pre>
+
+<p>Now we&rsquo;ll of course need to translate this to SQL. This is actually fairly easy
+and intuitive to do:</p>
+
+<pre><code>select
+    , min(x) as x_min
+    , max(x) as x_max
+    least(50, ceil(sqrt(count(x)))) as nbins
+into temp
+    bin_params
+from
+    rnorm;
+</code></pre>
+
+<p>There are a few things going on here:
+1) Counting the # of instances of x we have (<code>n</code>)
+2) Taking the <code>sqrt</code> of that value
+3) Rounding that value up to the nearest whole number (<code>ceil</code>)
+4) Taking the lower of the value of (3) and 50</p>
+
+<p>As you can see we&rsquo;re also saving the min/max value for x. This will come in handy
+later.</p>
+
+<p>Next we&rsquo;ll create a <code>bin_range</code> table that contains the lower and upper bounds of
+each bin. To do this we&rsquo;ll use the <code>generate_series</code> function in Postgres to
+generate <code>n</code> values between <code>x_min</code> and <code>x_max</code>.</p>
+
+<p>We&rsquo;ll then use the <code>lag</code> function to offset this data to give the lower and upper
+bounds their own columns.</p>
+
+<pre><code>select
+    generate_series(x_min::numeric, x_max::numeric, ((x_max - x_min) / nbins)::numeric) as bin
+into temp bins
+from
+  bin_params;
+
+select
+    lag(bin) over (order by bin) as low_bin
+    , b.bin as high_bin
+into temp bin_range
+from
+    bins b;
+</code></pre>
+
+<table border="1">
+  <tr>
+    <th align="center">low_bin</th>
+    <th align="center">high_bin</th>
+  </tr>
+  <tr valign="top">
+    <td align="right">&nbsp; </td>
+    <td align="right">-3.92909625498578</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.92909625498578</td>
+    <td align="right">-3.673483410809675</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.673483410809675</td>
+    <td align="right">-3.417870566633570</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.417870566633570</td>
+    <td align="right">-3.162257722457465</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">...</td>
+    <td align="right">...</td>
+  </tr>
+</table>
+
+<h3 id="binning-and-counting">Binning and Counting</h3>
+
+<p>Conceptually this part is quite simple: we need to create a frequency table
+that gives us the # of points that occurr in each bin. However in SQL terms
+this is a little tricky. We&rsquo;re going to be doing something that will make your
+Data Warehouse Engineer cringe&hellip;we&rsquo;ll be doing a cartesian join!</p>
+
+<p>We&rsquo;ll start by joining our <code>bins</code> table to our <code>diamonds</code> table. We&rsquo;re going
+to be doing an inner join because each bin should at least have <em>SOME</em> data in
+it (we calculated them with the same data after all). Now the next step is very
+important. We&rsquo;re going to join 2 tables where the value of <code>price</code> is within the
+range of one of the bins. It looks like this:</p>
+
+<pre><code>select
+    b.low_bin
+    , b.high_bin
+    , r.x
+from
+    bin_range b
+left join
+    rnorm r
+        on r.x &lt;= b.high_bin and
+        r.x &gt; b.low_bin
+where
+    b.low_bin is not null and
+    b.high_bin is not null
+order by
+    b.low_bin;
+</code></pre>
+
+<table border="1">
+  <tr>
+    <th align="center">low_bin</th>
+    <th align="center">high_bin</th>
+    <th align="center">x</th>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.60916920471936</td>
+    <td align="right">-3.375286320204154</td>
+    <td align="right">&nbsp; </td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.375286320204154</td>
+    <td align="right">-3.141403435688948</td>
+    <td align="right">-3.14852622197941</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.375286320204154</td>
+    <td align="right">-3.141403435688948</td>
+    <td align="right">-3.29226258210838</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.375286320204154</td>
+    <td align="right">-3.141403435688948</td>
+    <td align="right">-3.27717558760196</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.141403435688948</td>
+    <td align="right">-2.907520551173742</td>
+    <td align="right">-3.06108768424019</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.141403435688948</td>
+    <td align="right">-2.907520551173742</td>
+    <td align="right">-2.96137290727347</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-3.141403435688948</td>
+    <td align="right">-2.907520551173742</td>
+    <td align="right">-2.96593475434929</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">...</td>
+    <td align="right">...</td>
+    <td align="right">...</td>
+  </tr>
+</table>
+
+<p>This gets us almost all the way there. Last thing we need to do is aggregate the
+bins and count the # of times each set of bins has a particular value.</p>
+
+<pre><code>select
+    b.low_bin
+    , b.high_bin
+    , count(*) as freq
+from
+    bin_range b
+left join
+    rnorm r
+        on r.x &lt;= b.high_bin and
+        r.x &gt; b.low_bin
+where
+    b.low_bin is not null and
+    b.high_bin is not null
+group by
+    b.low_bin
+    , b.high_bin
+order by
+    b.low_bin;
+</code></pre>
+
+<table border="1">
+  <tr>
+    <th align="center">low_bin</th>
+    <th align="center">high_bin</th>
+    <th align="center">freq</th>
+  </tr>
+  <tr valign="top">
+    <td align="right">...</td>
+    <td align="right">...</td>
+    <td align="right">...</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-2.547947306347932</td>
+    <td align="right">-2.282606475399404</td>
+    <td align="right">25</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-2.282606475399404</td>
+    <td align="right">-2.017265644450876</td>
+    <td align="right">28</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-2.017265644450876</td>
+    <td align="right">-1.751924813502348</td>
+    <td align="right">41</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-1.751924813502348</td>
+    <td align="right">-1.486583982553820</td>
+    <td align="right">35</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-1.486583982553820</td>
+    <td align="right">-1.221243151605292</td>
+    <td align="right">50</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-1.221243151605292</td>
+    <td align="right">-0.955902320656764</td>
+    <td align="right">59</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-0.955902320656764</td>
+    <td align="right">-0.690561489708236</td>
+    <td align="right">43</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-0.690561489708236</td>
+    <td align="right">-0.425220658759708</td>
+    <td align="right">43</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">-0.425220658759708</td>
+    <td align="right">-0.159879827811180</td>
+    <td align="right">40</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">...</td>
+    <td align="right">...</td>
+    <td align="right">...</td>
+  </tr>
+</table>
+
+<h3 id="our-psuedo-chart">Our Psuedo-chart</h3>
+
+<p>Alright we&rsquo;re almost there! Time for the fun part. We&rsquo;re going to make a pseudo-visualization right here from our SQL table. Instead of displaying the frequency for each bin, we&rsquo;re going to make a bar chart. To do that we&rsquo;ll be using the <code>repeat(s char, n int)</code> function from Postgres. This function will repeat a string (<code>s</code>), <code>n</code> number of times.</p>
+
+<p>So in our case we&rsquo;ll be repeat the <code>'|'</code> character the by the count for each bin. To scale our chart, we&rsquo;ll actually apply normalize so that the largest frequency has 50 <code>'|'</code> marks and scale accordingly for the other buckets.</p>
+
+<pre><code>select
+  f.low_bin
+  , f.high_bin
+  , repeat('|', ceil(50 * f.freq / (select max(freq)::numeric from frequency_table))::int)
+from
+  frequency_table f
+;
+low_bin       |      high_bin      |                       count
+--------------------+--------------------+----------------------------------------------------
+-3.70145826274529 | -3.474553561931394 | ||||
+-3.474553561931394 | -3.247648861117498 | |
+-3.247648861117498 | -3.020744160303602 | |||||
+-3.020744160303602 | -2.793839459489706 | ||||||||
+-2.793839459489706 | -2.566934758675810 | |||||
+-2.566934758675810 | -2.340030057861914 | |||||||||
+-2.340030057861914 | -2.113125357048018 | ||||||||||||||||||||||||
+-2.113125357048018 | -1.886220656234122 | ||||||||||||||||||||||||||||||
+-1.886220656234122 | -1.659315955420226 | ||||||||||||||||||||||||||||||||||||
+-1.659315955420226 | -1.432411254606330 | ||||||||||||||||||||||||||||||||||||
+-1.432411254606330 | -1.205506553792434 | |||||||||||||||||||||||||||||||||||||||||
+-1.205506553792434 | -0.978601852978538 | ||||||||||||||||||||||||||||||||||||||||||||||||||
+-0.978601852978538 | -0.751697152164642 | ||||||||||||||||||||||||||||||||||||||||||
+-0.751697152164642 | -0.524792451350746 | ||||||||||||||||||||||||||||||||||||||||||||||||||
+-0.524792451350746 | -0.297887750536850 | ||||||||||||||||||||||||||||||||||||
+-0.297887750536850 | -0.070983049722954 | ||||||||||||||||||||||||||||
+-0.070983049722954 |  0.155921651090942 | |||||||||||||||||
+0.155921651090942 |  0.382826351904838 | ||||||||||||
+0.382826351904838 |  0.609731052718734 | ||||||||||||||||
+0.609731052718734 |  0.836635753532630 | ||||||||||
+0.836635753532630 |  1.063540454346526 | ||||||||||||
+1.063540454346526 |  1.290445155160422 | ||||||
+1.290445155160422 |  1.517349855974318 | ||
+</code></pre>
+
+<p>There you have it! You can simplify this script a lot by removing some of the more detailed bits regarding the bin selecting and scaling. You can find [simplified versions in this gist]().</p>
+
+<p><img src="//img/ascii-histogram.png" alt="" /></p>
+
+<h3 id="before-you-go">Before You Go</h3>
+
+<p>Some other helpful resources for histograms and all things SQL:</p>
+
+<ul>
+<li><a href="https://www.khanacademy.org/math/probability/data-distributions-a1/displays-of-distributions/v/histograms-intro">Khan Academy: Creating a Histogram</a></li>
+<li><a href="https://www.datacamp.com/community/tutorials/make-histogram-basic-r">Histograms in R</a></li>
+<li><a href="http://www.statmethods.net/graphs/density.html">Density Plots in R</a></li>
+<li><a href="https://support.office.com/en-us/article/Create-a-histogram-b6814e9e-5860-4113-ba51-e3a1b9ee1bbe">Histograms in Excel</a></li>
+</ul>
+
+    </section>
+</article>
+
+<footer id="post-meta" class="clearfix">
+    <a href="https://twitter.com/theglamp">
+    <img class="avatar" src="https://glamp.github.io/blog/images/avatar.png">
+    <div>
+        <span class="dark">Greg Lamp</span>
+        <span></span>
+    </div>
+    </a>
+    <section id="sharing">
+        <a class="twitter" href="https://twitter.com/intent/tweet?text=https%3a%2f%2fglamp.github.io%2fblog%2fposts%2fhistograms-in-postgres%2f - Histograms%20in%20Postgres by @theglamp"><span class="icon-twitter"> tweet</span></a>
+
+<a class="facebook" href="#" onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+      'facebook-share-dialog',
+      'width=626,height=436');
+    return false;"><span class="icon-facebook-rect"> Share</span>
+</a>
+
+    </section>
+</footer>
+
+
+
+<ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="/blog/posts/machine-learning-for-vps-of-product-mgmt/">Machine Learning for People Who Don&#39;t Care About Machine Learning<aside class="dates">Apr 10 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/psql-commands-for-the-wise/">SQL Commands for the Wise<aside class="dates">Apr 10 2018</aside></a>
+        </li>
+    
+</ul>
+
+
+
+        <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    
+    <a class="symbol" href="https://www.github.com/glamp">
+        circlegithub
+    </a>
+    
+    <a class="symbol" href="https://www.twitter.com/theglamp">
+        circletwitterbird
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+        © Copyright 2018 Greg Lamp
+    
+    </p>
+</footer>
+
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://glamp.github.io/blog/js/main.js"></script>
+<script src="https://glamp.github.io/blog/js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+</body>
+</html>

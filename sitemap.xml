@@ -3,7 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://glamp.github.io/blog/posts/machine-learning-for-vps-of-product-mgmt/</loc>
+    <lastmod>2018-04-10T21:42:40-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://glamp.github.io/blog/posts/psql-commands-for-the-wise/</loc>
+    <lastmod>2018-04-10T21:31:53-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://glamp.github.io/blog/posts/histograms-in-postgres/</loc>
+    <lastmod>2018-04-10T21:30:53-06:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://glamp.github.io/blog/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://glamp.github.io/blog/posts/</loc>
+    <lastmod>2018-04-10T21:42:40-06:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -14,6 +35,7 @@
   
   <url>
     <loc>https://glamp.github.io/blog/</loc>
+    <lastmod>2018-04-10T21:42:40-06:00</lastmod>
     <priority>0</priority>
   </url>
   
