@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="Greg Lamp">
-<meta name="description" content="My personal blog">
+<meta name="description" content="Greg&#39;s blog">
 <meta name="generator" content="Hugo 0.38.2" />
 <title>Machine Learning for People Who Don&#39;t Care About Machine Learning</title>
 <link rel="shortcut icon" href="https://glamp.github.io/blog/images/favicon.ico">
@@ -25,9 +25,9 @@
 <meta property="og:description" content="What is Machine Learning? The definition I have come up with for Machine Learning is as follows&hellip;
  machine learning is using data to detect patterns
  It involves 2 key concepts:
- Using statistics and math optimize this process The optimization process is referred to as training  Here&rsquo;s the big kicker that will likely make some people unhappy.
- It is the same thing as AI.
- That&rsquo;s right I said it." />
+ Using statistics and math optimize this process The optimization process is referred to as training  How the Internet portrays Machine Learning.
+Here&rsquo;s the big kicker that will likely make some people unhappy.
+ It is the same thing as AI." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://glamp.github.io/blog/posts/machine-learning-for-vps-of-product-mgmt/" />
 
@@ -53,14 +53,14 @@
 <meta itemprop="description" content="What is Machine Learning? The definition I have come up with for Machine Learning is as follows&hellip;
  machine learning is using data to detect patterns
  It involves 2 key concepts:
- Using statistics and math optimize this process The optimization process is referred to as training  Here&rsquo;s the big kicker that will likely make some people unhappy.
- It is the same thing as AI.
- That&rsquo;s right I said it.">
+ Using statistics and math optimize this process The optimization process is referred to as training  How the Internet portrays Machine Learning.
+Here&rsquo;s the big kicker that will likely make some people unhappy.
+ It is the same thing as AI.">
 
 
 <meta itemprop="datePublished" content="2018-04-10T21:42:40-06:00" />
 <meta itemprop="dateModified" content="2018-04-10T21:42:40-06:00" />
-<meta itemprop="wordCount" content="1004">
+<meta itemprop="wordCount" content="1209">
 
 
 
@@ -71,9 +71,9 @@
 <meta name="twitter:description" content="What is Machine Learning? The definition I have come up with for Machine Learning is as follows&hellip;
  machine learning is using data to detect patterns
  It involves 2 key concepts:
- Using statistics and math optimize this process The optimization process is referred to as training  Here&rsquo;s the big kicker that will likely make some people unhappy.
- It is the same thing as AI.
- That&rsquo;s right I said it."/>
+ Using statistics and math optimize this process The optimization process is referred to as training  How the Internet portrays Machine Learning.
+Here&rsquo;s the big kicker that will likely make some people unhappy.
+ It is the same thing as AI."/>
 <meta name="twitter:site" content="@https://www.twitter.com/theglamp"/>
 
 
@@ -99,7 +99,8 @@
         <h1>Machine Learning for People Who Don&#39;t Care About Machine Learning</h1>
         <h2 class="subtitle"></h2>
         <h2 class="headline">
-        April 10, 2018
+        April 10, 2018 • 6 minute read
+
         <br>
         
         </h2>
@@ -122,19 +123,25 @@
 <li>The optimization process is referred to as <em>training</em></li>
 </ol>
 
+<p><img src="/blog/img/ml.jpg" alt="" />
+<center>How the Internet portrays Machine Learning.</center></p>
+
 <p>Here&rsquo;s the big kicker that will likely make some people unhappy.</p>
 
 <blockquote>
 <p>It is the same thing as <em>AI</em>.</p>
 </blockquote>
 
-<p>That&rsquo;s right I said it. ML and AI are the same thing. I will qualify that this oversimplifies
+<p>That&rsquo;s right I said it. <strong>ML and AI are the same thing</strong>. I will qualify that this oversimplifies
 things just a little bit (but only a little bit). When marketing folk talk about AI there is
 typically the connotation that AI will eventually rule the humans. I have no problem with this. It&rsquo;s
 really a way to articulate machine learning that has gotten so good that it can self-learn and adapt
 to virtually any data you feed it.</p>
 
 <p>This, plus the fact that AI typically has post-apocolyptic undertones.</p>
+
+<p><img src="/blog/img/ai.jpg" alt="" />
+<center>How the Internet portrays AI. See, pretty much the same.</center></p>
 
 <h3 id="nothing-is-new">Nothing is new</h3>
 
@@ -148,7 +155,7 @@ that are currently en vogue have been around for a while. The major change is th
 </ol>
 
 <p>These 3 things, combined with the ever expanding and easy to use machine learning libraries such as
-<a href="...">scikit-learn</a>, <a href="...">tensorflow</a> (I said the T-word!), and <a href="...">R</a> (I know R isn&rsquo;t a library) have made
+<a href="http://scikit-learn.org/">scikit-learn</a>, <a href="https://www.tensorflow.org/">tensorflow</a> (I said the T-word!), and <a href="https://cran.r-project.org/">R</a> (I know R isn&rsquo;t a library) have made
 machine learning accessible to more people. Accessibility has bred limited real-world usage which in turn
 has bred hype.</p>
 
@@ -165,7 +172,7 @@ still need to be fed clean, consistent tablular data in order to be effective.</
 <p>Now when these algorithms <em>train</em> or calibrate, what they&rsquo;re really doing is finding the minimum distance
 between a set of points. This is much easier illustrated than typed.</p>
 
-<p><img src="../../img/linear-regression.png" alt="" /></p>
+<p><img src="/blog/img/linear-regression.png" alt="" /></p>
 
 <p>Take the image above as an example. This is a classic simple linear regression. The blue points are the
 data we want to predict. The red line is the <em>&ldquo;line of best fit&rdquo;</em> that our machine learning algorithm (in
@@ -189,7 +196,7 @@ wildest hopes and dreams while instantly making your business profitable. You ar
 (as seen above). In classification, you&rsquo;re trying ot calculate a line that will &ldquo;seperate the categories&rdquo;
 of your data points.</p>
 
-<p><img src="/img/wolf-or-cow.png" alt="" /></p>
+<p>/img/wolf-or-cow.png)</p>
 
 <h3 id="algorithms">Algorithms</h3>
 
@@ -233,6 +240,33 @@ are yet another algorithm you can use to calculate your line. Neural networks, a
 are handy because they can handle data that is psuedo-unstructured (like images, videos, etc.). I say pseudo-unstructured
 because ultimate it&rsquo;s still being fed into the algorithm in a tablular format. You just don&rsquo;t really have to pay as close
 attention to how refined and clean that data is. Pretty handy!</p>
+
+<h3 id="why-ml-is-so-hot">Why ML is so hot</h3>
+
+<p>It isn&rsquo;t difficult to <em>do machine learning</em> anymore. I mentioned the wealth of libraries out there. If you can&rsquo;t tell,
+I really like `scikit-learn. There are may reasons for this:</p>
+
+<ul>
+<li>I don&rsquo;t have to write much code when I use it</li>
+<li>It implements the greatest hits (and then some) of ML. So I can do just about everything without leaving the scikit-learn ecosystem.</li>
+<li>It&rsquo;s old. In this case, old means mature. Mature means not dealing with mind-numbing bugs.</li>
+<li>The creators and maintainers are very nice and have built up excellent documentation.</li>
+<li>If I have to listen to a lecture about ML, I prefer it come from someone like Olivier Grisel who does everything with just a slight,
+French accent 🇫🇷, thereby increasing the entertainment value.</li>
+</ul>
+
+<p><img src="/blog/img/so-hot-right-now.jpg" alt="" /></p>
+
+<p>My machine learing Francophile fetish aside, scikit-learn reduces building a very sophisticated machine learning model
+down to <strong>5 lines of code</strong>. This is not much code. You don&rsquo;t need a PhD in astrophysics or even a technical degree
+to use it:</p>
+
+<pre><code>from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier()
+target_variable = 'does-make-more-than-50k'
+columns = ['age', 'education', 'hours-worked-per-week']
+clf.fit(df[columns], df[target_variable])
+</code></pre>
 
     </section>
 </article>
